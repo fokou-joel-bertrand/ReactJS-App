@@ -4,6 +4,7 @@
 /bootstrap
 /.pnp
 .pnp.js
+/src/shared
 
 # testing
 /coverage
