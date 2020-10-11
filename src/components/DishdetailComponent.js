@@ -1,6 +1,86 @@
-import React from 'react';
-import { CardImg, Card, CardText, CardTitle, CardBody, BreadcrumbItem, Breadcrumb } from 'reactstrap';
+import React, {Component} from 'react';
+import { CardImg, Card, CardText, CardTitle, Button, 
+        CardBody, BreadcrumbItem, Breadcrumb, Modal, ModalBody,
+         ModalHeader, Label, Row, Form } from 'reactstrap';
 import { Link } from 'react-router-dom';
+import {Control, Errors, LocalForm} from 'react-redux-form';
+
+const required = val => val && val.length;
+const maxLength = len => val => !val || len >= val.length;
+const minLength = len => val =>  !(val) || len <= val.length;
+
+class CommentForm extends Component {
+
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            isModalOpen : false
+        }
+
+        this.toggleModal = this.toggleModal.bind(this);
+    }
+
+    toggleModal () {
+        this.setState({isModalOpen : !this.state.isModalOpen})
+    }
+
+    handleSubmit(values) {
+        alert(`record are ${JSON.stringify(values)}`)
+    }
+
+    render() {
+        return (
+            <React.Fragment>
+                <Button className='bg-light border-secondary text-secondary' onClick={this.toggleModal}>
+                    <span className='fa fa-edit fa-lg'></span> Submit comment
+                </Button>
+                <Modal isOpen={this.state.isModalOpen} toggle={this.toggleModal}>
+                       <ModalHeader toggle={this.toggleModal}>Submit comment</ModalHeader>
+                       <ModalBody>
+                           <LocalForm onSubmit={(values) => this.handleSubmit(values)}>
+                                <Row className='form-group m-2'>
+                                    <Label htmlFor='rating'>Rating</Label>
+                                    <Control.select model='.rating' className='form-control'>
+                                        <option>1</option>
+                                        <option>2</option>
+                                        <option>3</option>
+                                        <option>4</option>
+                                        <option>5</option>
+                                        <option>6</option>
+                                    </Control.select>
+                                </Row>
+                                <Row className='form-group m-2'>
+                                    <Label htmlFor='name'>Your Name</Label> 
+                                    <Control.text model='.name' className='form-control'
+                                      validators={{required, minLength: minLength(3), maxLength: maxLength(15)}}
+                                    />
+                                    <Errors 
+                                    className='text-danger'
+                                    show='touched'
+                                    model='.name'
+                                    messages = {{
+                                        required: 'This field is required',
+                                        minLength: 'The minimum length is 3 characters',
+                                        maxLength: 'The max length is 15 characters'
+                                    }}
+                                          />
+                                </Row>
+                                <Row className='form-group m-2'>
+                                    <Label htmlFor='comment'>Comment</Label>
+                                    <Control.textarea model='.comment' className='form-control'
+                                    rows='6' id='comment' name='comment'/>
+                                </Row>
+                                <Row className='form-group m-2'>
+                                    <Button type='submit' color='primary'>Submit</Button>
+                                </Row>
+                           </LocalForm>
+                       </ModalBody>
+                </Modal>
+            </React.Fragment>
+        )
+    }
+}
 
    const RenderDish = ({dish}) => {
 
@@ -40,6 +120,7 @@ import { Link } from 'react-router-dom';
                             })
                         }
                     </ul>
+                    <CommentForm />
                 </div>
             )
       } else {
@@ -56,6 +137,7 @@ import { Link } from 'react-router-dom';
                 <div className='container'>
                     <div className='row'>
                         <Breadcrumb>
+                           <BreadcrumbItem><Link to='/home'>Home</Link></BreadcrumbItem>
                            <BreadcrumbItem><Link to='/menu'>Menu</Link></BreadcrumbItem>
                            <BreadcrumbItem active>{props.dish.name}</BreadcrumbItem>
                         </Breadcrumb>
