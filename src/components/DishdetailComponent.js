@@ -4,6 +4,7 @@ import { CardImg, Card, CardText, CardTitle, Button,
          ModalHeader, Label, Row, Form } from 'reactstrap';
 import { Link } from 'react-router-dom';
 import {Control, Errors, LocalForm} from 'react-redux-form';
+import {Loading} from './LoadingComponent';
 
 const required = val => val && val.length;
 const maxLength = len => val => !val || len >= val.length;
@@ -105,6 +106,7 @@ class CommentForm extends Component {
  }
  
     const RenderComments = ({comments, addComment, dishId}) => {
+
       if(comments != null){
           return(
                 <div className='col-12 col-sm-5 m-1'>
@@ -115,7 +117,7 @@ class CommentForm extends Component {
                                  return(
                                     <li key={comments.id}>
                                     <p>{comment.comment}</p>
-                                    <p>-- {comment.author},                            { new Intl.DateTimeFormat('en-US', {year : 'numeric', month : 'short', day : '2-digit'}).format(new Date(Date.parse(comment.date)))} </p>
+                                    <p>-- {comment.author},{ new Intl.DateTimeFormat('en-US', {year : 'numeric', month : 'short', day : '2-digit'}).format(new Date(Date.parse(comment.date)))} </p>
                                     </li>
                                  )
                             })
@@ -133,7 +135,26 @@ class CommentForm extends Component {
     }
 
     const DishDetail = (props) => {
-        if(props.dish != null) {
+
+        if(props.isLoading) {
+            return (
+                <div className='container'>
+                    <div className='row'>
+                        <Loading/>
+                    </div>
+                </div>
+            )
+        }
+        else if (props.errMess) {
+            return (
+                   <div className='container'>
+                       <div className='row'>
+                           <h4>{props.errMess}</h4>
+                       </div>
+                   </div>          
+            )
+        }
+        else if (props.dish != null) {
             return (
                 <div className='container'>
                     <div className='row'>
