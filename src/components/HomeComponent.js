@@ -11,10 +11,10 @@ const RenderCard = ({item, isLoading, errMess}) => {
     }
     else if (errMess) {
         return (
-              <Loading />
+            <h4>{errMess}</h4>
             );
     }
-    else
+    else {    
      return(
         <Card>
             <CardImg src={baseUrl + item.image} alt={item.name}/>
@@ -24,7 +24,7 @@ const RenderCard = ({item, isLoading, errMess}) => {
             <CardText>{item.description}</CardText>
             </CardBody>
         </Card>
-    );
+    );}
 }
 
 const Home = (props) => {
@@ -33,7 +33,7 @@ const Home = (props) => {
             <div className='row align-items-start'>
                 <div className='col-12 col-md m-1'>
                     <RenderCard item={props.dish} 
-                          isLoading={props.dishesLoading} errMess={props.dishesErrMes}/>
+                          isLoading={props.dishesLoading} errMess={props.dishesErrMess}/>
                 </div>
                 <div className='col-12 col-md m-1'>
                     <RenderCard item={props.promotion} 
